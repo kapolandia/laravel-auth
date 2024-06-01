@@ -59,7 +59,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white {{ Route::currentRouteName() == 'admin.projects.create' ? 'bg-secondary rounded' : '' }}" href="{{ route('admin.dashboard') }}">
+                                <a class="nav-link text-white {{ Route::currentRouteName() == 'admin.projects.create' ? 'bg-secondary rounded' : '' }}" href="{{ route('admin.projects.create') }}">
                                     <i class="fa-solid fa-square-plus"></i> Create
                                 </a>
                             </li>
