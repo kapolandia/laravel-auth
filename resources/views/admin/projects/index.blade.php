@@ -24,6 +24,12 @@
                 <td class="w-25 text-center">
                     <button type="button" class="btn btn-outline-primary" onclick="window.location.href='{{ route('admin.projects.show', ['project' => $project->id]) }}'"><i class="fa-solid fa-eye"></i></button>
                     <button type="button" class="btn btn-outline-dark" onclick="window.location.href='{{ route('admin.projects.edit', ['project' => $project->id]) }}'"><i class="fa-solid fa-pen"></i></button>
+                    <form action="{{route('admin.projects.destroy', $project->id)}}" method="POST" style="display: inline-block">
+                      @csrf
+                      @method('DELETE')
+
+                      <button type="submit" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+                    </form>
                 </td>
             </tr>
         @endforeach
