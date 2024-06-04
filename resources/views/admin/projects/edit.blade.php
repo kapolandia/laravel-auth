@@ -1,6 +1,17 @@
 @extends('layouts.admin')
 
 @section('content')
+
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
 <form action="{{route('admin.projects.update' , $project->id)}}" method="POST">
     @csrf
     @method('PUT')
@@ -9,6 +20,16 @@
       <label for="exampleInputEmail1" class="form-label">Project Name</label>
       <input type="text" class="form-control" id="name" name="name" value="{{$project->name}}">
     </div>
+    <div class="mb-3">
+      <label for="formFile" class="form-label">Cover Image</label>
+      <input class="form-control" type="file" id="formFile" name="cover_image">
+    </div>
+    @if ($project->cover_image)
+        <div>
+            <h5 class="h5">Cover preview</h5>
+            <img src="{{ asset('storage/' . $project->cover_image) }}" alt="{{ $project->title }}">
+        </div>
+    @endif
     <div class="mb-3">
       <label for="exampleInputPassword1" class="form-label">Client Name</label>
       <input type="text" class="form-control" id="exampleInputPassword1" name="client_name" value="{{$project->client_name}}">

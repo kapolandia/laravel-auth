@@ -1,11 +1,26 @@
 @extends('layouts.admin')
 
 @section('content')
-<form action="{{route('admin.projects.store')}}" method="POST">
+
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+<form action="{{route('admin.projects.store')}}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">Project Name</label>
       <input type="text" class="form-control" id="name" name="name">
+    </div>
+    <div class="mb-3">
+      <label for="formFile" class="form-label">Cover Image</label>
+      <input class="form-control" type="file" id="formFile" name="cover_image">
     </div>
     <div class="mb-3">
       <label for="exampleInputPassword1" class="form-label">Client Name</label>
