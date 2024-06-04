@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -65,7 +66,7 @@ class ProjectController extends Controller
         $project = $newProject;
 
         //return view('admin.projects.show.' . $newProject->id, compact('project')); non riesco ad usarlo
-        return redirect()->route('admin.projects.show', ['project' => $newProject->id])->with('message', $newProject->name . ' successfully created.');;
+        return redirect()->route('admin.projects.show', ['project' => $newProject->id])->with('message', $newProject->name . ' successfully created.');
     }
 
     /**
@@ -99,10 +100,35 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        $validated = $request->validate(
+            [
+                'name' => [
+                    'required',
+                    'min:5',
+                    'max:150',
+                    Rule::unique('projects')->ignore($project)
+                ],
+                'client_name' => 'min:5|max:150',
+                'summary' => 'nullable|min:10',
+                'cover_image' => 'nullable|image|max:256',
+            ]
+        );
+
         $formData = $request->all();
+
+        //gestione imgs
+        if($request->hasFile('cover_image')) {
+            if($project->cover_image) {
+                Storage::delete($project->cover_image);
+            }
+
+            $img_path = Storage::disk('public')->put('project_images', $formData['cover_image']);
+            $formData['cover_image'] = $img_path;
+        }
+
         $formData['slug'] = Str::slug($formData['name'], '-');
         $project->update($formData);
-        return redirect()->route('admin.projects.show', ['project' => $project->id]);
+        return redirect()->route('admin.projects.show', ['project' => $project->id])->with('message', $project->name . ' successfully updated.');
     }
 
     /**
